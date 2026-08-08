@@ -1368,11 +1368,11 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;over
       <div class="pbd" style="background:#febc2e"></div>
       <div class="pbd" style="background:#28c840"></div>
     </div>
-    <iframe class="prev-fr" id="prev-fr" title="Portfolio Vorschau"></iframe>
+    <iframe class="prev-fr" id="prev-fr" title="Portfolio Vorschau" data-i18n-title="title_portfolio_preview"></iframe>
   </div>
   <div class="prev-actions">
-    <div class="prev-lbl">Live-Vorschau</div>
-    <button class="btn btn-o btn-s" onclick="previewFull()" style="font-size:10px;padding:4px 10px">⊞ Vollbild</button>
+    <div class="prev-lbl" data-i18n="lbl_live_preview">Live-Vorschau</div>
+    <button class="btn btn-o btn-s" onclick="previewFull()" style="font-size:10px;padding:4px 10px" data-i18n="btn_fullscreen_short">⊞ Vollbild</button>
   </div>
 </div>
 </div>
@@ -2371,6 +2371,10 @@ T.de.btn_pm_light='☀️ Light';T.en.btn_pm_light='☀️ Light';T.ar.btn_pm_li
 T.de.sec_eingangsanim='Eingangs-Animation';T.en.sec_eingangsanim='Entrance Animation';T.ar.sec_eingangsanim='رسوم الدخول';
 T.de.lbl_portfolio_web='Portfolio / Website';T.en.lbl_portfolio_web='Portfolio / Website';T.ar.lbl_portfolio_web='المحفظة / الموقع';
 T.de.ph_max_dev='max.dev';T.en.ph_max_dev='john.dev';T.ar.ph_max_dev='ahmed.dev';
+// ─── Live-Vorschau Panel ──────────────────────────────────────────
+T.de.lbl_live_preview='Live-Vorschau';T.en.lbl_live_preview='Live Preview';T.ar.lbl_live_preview='معاينة مباشرة';
+T.de.btn_fullscreen_short='⊞ Vollbild';T.en.btn_fullscreen_short='⊞ Fullscreen';T.ar.btn_fullscreen_short='⊞ ملء الشاشة';
+T.de.title_portfolio_preview='Portfolio Vorschau';T.en.title_portfolio_preview='Portfolio Preview';T.ar.title_portfolio_preview='معاينة المحفظة';
 // ─── Mehrsprachiges Portfolio (opt-in Feature) ────────────────────
 T.de.tab_i18n='🌐 Mehrsprachig';T.en.tab_i18n='🌐 Multilingual';T.ar.tab_i18n='🌐 متعدد اللغات';
 T.de.info_i18n_intro='Optional: Lass dein Portfolio automatisch von der KI übersetzen. Besucher können dann im fertigen Portfolio zwischen Sprachen wechseln. Diese Funktion ist rein optional — ohne Auswahl bleibt dein Portfolio einsprachig.';
@@ -2720,7 +2724,7 @@ var PROF_LABELS={
 // ═══ PORTFOLIO-OUTPUT LABELS (feste Texte im generierten Portfolio) ═══
 var PORTFOLIO_LABELS={
   de:{
-    print:'Drucken',status_online:'system.online · portfolio.exe',
+    print:'Drucken',status_online:'system.online · portfolio.exe',portfolio_word:'Portfolio',
     contact_cta:'Kontakt aufnehmen',view_projects:'Projekte ansehen',website_link:'↗ Website',
     scroll:'Scroll',
     nav_about:'Über mich',nav_skills:'Skills',nav_projects:'Projekte',nav_career:'Karriere',nav_contact:'Kontakt',
@@ -2731,7 +2735,7 @@ var PORTFOLIO_LABELS={
     contact_lbl:'Kontakt',contact_ttl:'Lass uns reden.'
   },
   en:{
-    print:'Print',status_online:'system.online · portfolio.exe',
+    print:'Print',status_online:'system.online · portfolio.exe',portfolio_word:'Portfolio',
     contact_cta:'Get in touch',view_projects:'View projects',website_link:'↗ Website',
     scroll:'Scroll',
     nav_about:'About',nav_skills:'Skills',nav_projects:'Projects',nav_career:'Career',nav_contact:'Contact',
@@ -2742,7 +2746,7 @@ var PORTFOLIO_LABELS={
     contact_lbl:'Contact',contact_ttl:'Let\'s talk.'
   },
   ar:{
-    print:'طباعة',status_online:'system.online · portfolio.exe',
+    print:'طباعة',status_online:'النظام.متصل · portfolio.exe',portfolio_word:'المحفظة',
     contact_cta:'تواصل معي',view_projects:'عرض المشاريع',website_link:'↗ الموقع',
     scroll:'مرر للأسفل',
     nav_about:'عني',nav_skills:'المهارات',nav_projects:'المشاريع',nav_career:'المسيرة',nav_contact:'التواصل',
@@ -5944,7 +5948,10 @@ function buildPortfolio(full){
     '</div>';
   }
 
-  return '<!DOCTYPE html><html lang="de"><head>'+
+  var pLangCode=currentLang||'de';
+  var pDir=pLangCode==='ar'?'rtl':'ltr';
+
+  return '<!DOCTYPE html><html lang="'+pLangCode+'" dir="'+pDir+'"><head>'+
   '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
   '<meta name="description" content="'+pgDesc.replace(/"/g,'&quot;')+'">'+
   '<meta name="author" content="'+name+'">'+
@@ -6058,6 +6065,21 @@ function buildPortfolio(full){
   // Print
   '@media print{nav,.nd-wrap,.cur,.cring,.sp{display:none!important}.sec{break-inside:avoid;padding:32px 24px}.hero{min-height:auto;padding:50px 24px 30px}.reveal{opacity:1!important;transform:none!important}}'+
   '@media(max-width:768px){.hero-photo{display:none}nav{padding:14px 20px}.n-links{display:none}.sec{padding:56px 6vw}.hero{padding:80px 6vw 50px}}'+
+  // RTL-Anpassungen für Arabisch
+  (pDir==='rtl'?(
+    'body{direction:rtl;text-align:right}'+
+    'nav{flex-direction:row-reverse}.n-links{flex-direction:row-reverse}'+
+    '.hero-cta{flex-direction:row-reverse}'+
+    '.proj-grid,.ct-grid{direction:rtl}'+
+    '.tl-row{flex-direction:row-reverse}.tl-dot{margin-left:0;margin-right:0}'+
+    '.scroll-hint{right:auto;left:24px}'+
+    '.term-badge{direction:ltr;display:inline-flex}'+ // Terminal-Status bleibt LTR (technischer String)
+    '.proj-tech{direction:ltr;justify-content:flex-end}'+ // Tech-Namen (React, Docker) bleiben LTR
+    '.hero-photo{right:auto;left:8vw}'+
+    '.foot-name{direction:ltr;display:inline-block}'+ // Namen oft lateinische Schrift
+    '.pi18n-sw{margin-right:0;margin-left:10px}'+
+    '.bio-p::first-letter{float:right;margin:6px 0 0 10px;font-family:'+c.sans+'}'
+  ):'')+
   '</style></head><body>'+
 
   // Elements
@@ -6075,7 +6097,7 @@ function buildPortfolio(full){
   // HERO
   '<section id="sec-hero" class="hero"><div class="hero-bg"></div>'+
   '<div class="hero-content">'+
-  (isIT?'<div class="term-badge"><div class="t-blink"></div>'+pl('status_online')+'</div>':'<div class="hero-pre">Portfolio · '+(D.location||'')+'</div>')+
+  (isIT?'<div class="term-badge"><div class="t-blink"></div>'+pl('status_online')+'</div>':'<div class="hero-pre">'+pl('portfolio_word')+' · '+(D.location||'')+'</div>')+
   '<h1 class="hero-name" data-text="'+name+'">'+heroNameHTML+'</h1>'+
   '<div class="hero-title">'+(D.title||'')+'</div>'+
   (D.tagline?'<div class="hero-tag" data-pk="tagline">&ldquo;'+D.tagline+'&rdquo;</div>':'')+
