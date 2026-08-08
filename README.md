@@ -22,8 +22,12 @@ auch über das `file://`-Protokoll lädt.
 
 ## GitHub Pages
 
-1. Repository-Settings → Pages → Branch `main`, Ordner `/ (root)` auswählen
-2. Fertig — die Seite ist unter `https://<username>.github.io/<repo>/` erreichbar
+**Repo-Settings → Pages → Source: „GitHub Actions"** wählen (nicht „Deploy from a branch").
+Der mitgelieferte Workflow (`.github/workflows/deploy.yml`) übernimmt den Rest automatisch
+bei jedem Push auf `main` — verwendet den offiziellen „Static HTML"-Workflow von GitHub,
+kein Jekyll-Build, keine Transformation der Dateien.
+
+Die Seite ist danach unter `https://<username>.github.io/<repo>/` erreichbar.
 
 ## KI-Backend
 
