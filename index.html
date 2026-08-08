@@ -2717,6 +2717,44 @@ var PROF_LABELS={
   ar:{it:'التقنيات ولغات البرمجة',design:'أدوات وبرامج التصميم',marketing:'أدوات ومنصات التسويق',management:'أساليب وأدوات الإدارة',science:'مناهج وبرامج البحث',other:'المهارات والأدوات'}
 };
 
+// ═══ PORTFOLIO-OUTPUT LABELS (feste Texte im generierten Portfolio) ═══
+var PORTFOLIO_LABELS={
+  de:{
+    print:'Drucken',status_online:'system.online · portfolio.exe',
+    contact_cta:'Kontakt aufnehmen',view_projects:'Projekte ansehen',website_link:'↗ Website',
+    scroll:'Scroll',
+    nav_about:'Über mich',nav_skills:'Skills',nav_projects:'Projekte',nav_career:'Karriere',nav_contact:'Kontakt',
+    skills_lbl:'Kompetenzen',skills_ttl:'Was ich kann.',
+    about_lbl:'Über mich',about_ttl:'Wer ich bin.',
+    projects_lbl:'Ausgewählte Projekte',projects_ttl:'Was ich gebaut habe.',
+    career_lbl:'Karriere & Bildung',career_ttl:'Mein Weg.',
+    contact_lbl:'Kontakt',contact_ttl:'Lass uns reden.'
+  },
+  en:{
+    print:'Print',status_online:'system.online · portfolio.exe',
+    contact_cta:'Get in touch',view_projects:'View projects',website_link:'↗ Website',
+    scroll:'Scroll',
+    nav_about:'About',nav_skills:'Skills',nav_projects:'Projects',nav_career:'Career',nav_contact:'Contact',
+    skills_lbl:'Competencies',skills_ttl:'What I can do.',
+    about_lbl:'About Me',about_ttl:'Who I am.',
+    projects_lbl:'Selected Projects',projects_ttl:'What I\'ve built.',
+    career_lbl:'Career & Education',career_ttl:'My journey.',
+    contact_lbl:'Contact',contact_ttl:'Let\'s talk.'
+  },
+  ar:{
+    print:'طباعة',status_online:'system.online · portfolio.exe',
+    contact_cta:'تواصل معي',view_projects:'عرض المشاريع',website_link:'↗ الموقع',
+    scroll:'مرر للأسفل',
+    nav_about:'عني',nav_skills:'المهارات',nav_projects:'المشاريع',nav_career:'المسيرة',nav_contact:'التواصل',
+    skills_lbl:'الكفاءات',skills_ttl:'ما أستطيع فعله.',
+    about_lbl:'عني',about_ttl:'من أنا.',
+    projects_lbl:'مشاريع مختارة',projects_ttl:'ما قمت ببنائه.',
+    career_lbl:'المسيرة والتعليم',career_ttl:'رحلتي.',
+    contact_lbl:'التواصل',contact_ttl:'لنتحدث.'
+  }
+};
+function pl(key){var s=PORTFOLIO_LABELS[currentLang]||PORTFOLIO_LABELS.de;return s[key]||PORTFOLIO_LABELS.de[key]||key;}
+
 // ═══ MODE ═══
 function toggleMode(){
   darkMode=!darkMode;
@@ -5661,7 +5699,7 @@ function buildPortfolio(full){
 
   // Nav
   var navSections=[D.bio&&'about',allSkills.length&&'skills',D.projects.length&&'projekte',(D.experience.length||D.education.length)&&'karriere',ctsrc.length&&'kontakt'].filter(Boolean);
-  var navLinks=navSections.map(function(s){var lbs={about:'Über mich',skills:'Skills',projekte:'Projekte',karriere:'Karriere',kontakt:'Kontakt'};return '<a href="#sec-'+s+'">'+lbs[s]+'</a>';}).join('');
+  var navLinks=navSections.map(function(s){var lbs={about:pl('nav_about'),skills:pl('nav_skills'),projekte:pl('nav_projects'),karriere:pl('nav_career'),kontakt:pl('nav_contact')};return '<a href="#sec-'+s+'">'+lbs[s]+'</a>';}).join('');
 
   // Background CSS
   var bgCSS='';
@@ -6029,7 +6067,7 @@ function buildPortfolio(full){
   // Nav
   '<nav><a href="#sec-hero" class="n-logo">'+name.split(' ')[0]+'<b>.</b></a><div class="n-links">'+navLinks+'</div>'+
   (hasI18n?'<div class="pi18n-sw" id="pi18n-sw">'+i18nNavLangs.map(function(o,li){return '<button class="pi18n-btn'+(li===0?' sel':'')+'" onclick="pi18nSwitch(\''+o.code+'\',this)">'+o.label+'</button>';}).join('')+'</div>':'')+
-  '<button class="n-print" onclick="window.print()">Drucken</button></nav>'+
+  '<button class="n-print" onclick="window.print()">'+pl('print')+'</button></nav>'+
 
   // Dot nav
   '<div class="nd-wrap">'+['hero'].concat(navSections).map(function(s,i){return '<div class="nd'+(i===0?' a':'')+'" id="nd'+i+'" onclick="document.getElementById(\'sec-'+s+'\')&&document.getElementById(\'sec-'+s+'\').scrollIntoView({behavior:\'smooth\'})" title="'+s+'"></div>';}).join('')+'</div>'+
@@ -6037,41 +6075,41 @@ function buildPortfolio(full){
   // HERO
   '<section id="sec-hero" class="hero"><div class="hero-bg"></div>'+
   '<div class="hero-content">'+
-  (isIT?'<div class="term-badge"><div class="t-blink"></div>system.online · portfolio.exe</div>':'<div class="hero-pre">Portfolio · '+(D.location||'')+'</div>')+
+  (isIT?'<div class="term-badge"><div class="t-blink"></div>'+pl('status_online')+'</div>':'<div class="hero-pre">Portfolio · '+(D.location||'')+'</div>')+
   '<h1 class="hero-name" data-text="'+name+'">'+heroNameHTML+'</h1>'+
   '<div class="hero-title">'+(D.title||'')+'</div>'+
   (D.tagline?'<div class="hero-tag" data-pk="tagline">&ldquo;'+D.tagline+'&rdquo;</div>':'')+
   '<div class="hero-cta">'+
-  (ctsrc[0]?'<a href="'+ctsrc[0].h+'" class="btn-h fill">Kontakt aufnehmen</a>':'')+
-  (D.projects.length?'<button class="btn-h line" onclick="document.getElementById(\'sec-projekte\')&&document.getElementById(\'sec-projekte\').scrollIntoView({behavior:\'smooth\'})">Projekte ansehen</button>':'')+
-  (D.website?'<a href="https://'+D.website.replace(/^https?:\/\//,'')+'" target="_blank" class="btn-h line">↗ Website</a>':'')+
+  (ctsrc[0]?'<a href="'+ctsrc[0].h+'" class="btn-h fill">'+pl('contact_cta')+'</a>':'')+
+  (D.projects.length?'<button class="btn-h line" onclick="document.getElementById(\'sec-projekte\')&&document.getElementById(\'sec-projekte\').scrollIntoView({behavior:\'smooth\'})">'+pl('view_projects')+'</button>':'')+
+  (D.website?'<a href="https://'+D.website.replace(/^https?:\/\//,'')+'" target="_blank" class="btn-h line">'+pl('website_link')+'</a>':'')+
   '</div></div>'+
   (hasPhoto||hasAvatar||hasVideo||pQR2||D_video?'<div class="hero-photo"><div class="photo-frame">'+avatarHTML+'</div>'+qrCornerHTML+'</div>':'')+
   (D_video&&vidOpts.pos==='beside'?vidBesideHTML:'')+
   (D_video&&vidOpts.pos==='float'?vidFloatHTML:'')+
   (D_video?vidLightbox:'')+
-  '<div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>'+
+  '<div class="scroll-hint"><span>'+pl('scroll')+'</span><div class="scroll-line"></div></div>'+
   '</section>'+
 
   // ABOUT
-  (D.bio?'<section id="sec-about" class="sec"><div class="s-lbl">Über mich</div><div class="s-ttl">Wer ich bin.</div>'+
+  (D.bio?'<section id="sec-about" class="sec"><div class="s-lbl">'+pl('about_lbl')+'</div><div class="s-ttl">'+pl('about_ttl')+'</div>'+
   '<div class="bio-p reveal" data-pk="bio">'+D.bio+'</div>'+
   (D.strengths?'<div class="str-box reveal" data-pk="strengths">'+D.strengths+'</div>':'')+
   (D.highlight?'<div class="hl-block reveal" data-pk="highlight">&ldquo;'+D.highlight+'&rdquo;</div>':'')+
   '</section>':'')+
 
   // SKILLS
-  (allSkills.length?'<section id="sec-skills" class="sec"><div class="s-lbl">Kompetenzen</div><div class="s-ttl">Was ich kann.</div>'+skillHTML+'</section>':'')+
+  (allSkills.length?'<section id="sec-skills" class="sec"><div class="s-lbl">'+pl('skills_lbl')+'</div><div class="s-ttl">'+pl('skills_ttl')+'</div>'+skillHTML+'</section>':'')+
 
   // PROJECTS
-  (D.projects.length?'<section id="sec-projekte" class="sec"><div class="s-lbl">Ausgewählte Projekte</div><div class="s-ttl">Was ich gebaut habe.</div><div class="proj-grid">'+projHTML+'</div></section>':'')+
+  (D.projects.length?'<section id="sec-projekte" class="sec"><div class="s-lbl">'+pl('projects_lbl')+'</div><div class="s-ttl">'+pl('projects_ttl')+'</div><div class="proj-grid">'+projHTML+'</div></section>':'')+
 
   // KARRIERE
-  ((D.experience.length||D.education.length)?'<section id="sec-karriere" class="sec"><div class="s-lbl">Karriere & Bildung</div><div class="s-ttl">Mein Weg.</div><div class="tl-wrap">'+expHTML+eduHTML+'</div>'+
+  ((D.experience.length||D.education.length)?'<section id="sec-karriere" class="sec"><div class="s-lbl">'+pl('career_lbl')+'</div><div class="s-ttl">'+pl('career_ttl')+'</div><div class="tl-wrap">'+expHTML+eduHTML+'</div>'+
   (D.awards?'<div style="margin-top:32px;padding:16px 20px;background:'+c.bg2+';border:1px solid '+c.hr+';border-radius:4px"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:'+ac+';font-family:'+c.mono+';margin-bottom:8px">Auszeichnungen</div><p style="font-size:13px;color:'+c.text2+';line-height:1.7">'+D.awards+'</p></div>':'')+'</section>':'')+
 
   // CONTACT
-  (ctsrc.length?'<section id="sec-kontakt" class="sec"><div class="s-lbl">Kontakt</div><div class="s-ttl">Lass uns reden.</div><div class="ct-grid">'+ctHTML+'</div></section>':'')+
+  (ctsrc.length?'<section id="sec-kontakt" class="sec"><div class="s-lbl">'+pl('contact_lbl')+'</div><div class="s-ttl">'+pl('contact_ttl')+'</div><div class="ct-grid">'+ctHTML+'</div></section>':'')+
 
   (D_video&&vidOpts.pos==='section'?vidSectionHTML:'')+
 
